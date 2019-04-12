@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context		http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc	http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+        http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+ 		http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+
+    <!--
+    Most controllers will use the ControllerClassNameHandlerMapping above, but
+    for the index controller we are using ParameterizableViewController, so we must
+    define an explicit mapping for it.
+    -->
+    
+    <context:component-scan base-package="controllers"/>
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/pic/**" location="/pic/" />
+    <mvc:resources mapping="/assets/**" location="/assets/" />
+    <mvc:resources mapping="/songcontest/**" location="/songcontest/" />
+    <mvc:resources mapping="/songs/**" location="/songs/" />
+    <mvc:resources mapping="/styles/**" location="/styles/" />
+    
+    <bean id="userDAOImpl" class="model.jdbc.UserDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="roleUserDAOImpl" class="model.jdbc.RoleUserDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="messageDAOImpl" class="model.jdbc.MessageDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="RelationUserDAOImpl" class="model.jdbc.RelationUserDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="CheckBlocksDAOImpl" class="model.jdbc.CheckBlocksDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="SongDAOImpl" class="model.jdbc.SongDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="ResultsDAOImpl" class="model.jdbc.ResultsDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="ScoresDAOImpl" class="model.jdbc.ScoresDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <!-- Database Configurations -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/songcontest?serverTimezone=UCT" />
+        <property name="username" value="root" />
+        <property name="password" value="19141918" />
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <!--<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="index.html">indexController</prop>
+            </props>
+        </property>
+    </bean>-->
+
+    <bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <!-- for files -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000"/>
+    </bean>
+
+    <!--
+    The index controller.
+    -->
+    <!--<bean name="indexController"
+    class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+    p:viewName="index" />-->
+
+</beans>
